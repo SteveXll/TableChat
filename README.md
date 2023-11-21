@@ -1,5 +1,5 @@
-# AbstractInterp
-Abstract Interpolation
+# Table Chat
+Pass Markdown Table to Chat GPT and convert to HTML then add javascript capability
 
 ## Compares Chat GPT 3.5 vs 4.0
 
