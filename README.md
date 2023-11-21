@@ -6,306 +6,297 @@ Abstract Interpolation
 
 ## Chat GPT 3.5
 
-Sure! Here's an example of a linear interpolation function that takes inputs as a Dictionary<int, double> and a list of interp x points List<int> and returns a Dictionary<int, double>:
+You can use the markdown-it package in Node.js to convert the markdown table to HTML. Here's an example of how you can do it:
 
-```C#
-public static Dictionary<int, double> LinearInterpolation(Dictionary<int, double> inputData, List<int> interpXPoints)
-{
-    Dictionary<int, double> interpolatedData = new Dictionary<int, double>();
+```javascript
+const markdownIt = require('markdown-it');
+const md = new markdownIt();
 
-    foreach (int x in interpXPoints)
-    {
-        if (inputData.ContainsKey(x))
-        {
-            interpolatedData[x] = inputData[x];
-            continue;
-        }
+const markdownTable = '| 1 | Team    |         |             |             |                 |\n' +
+                      '|---|---------|---------|-------------|-------------|-----------------|\n' +
+                      '| 2 | Man Utd |         |             |             |                 |\n' +
+                      '| 3 |         | Man Utd | Liverpool   | 23-Dec-2023 | Anfield         |\n' +
+                      '| 5 |         | Arsenal | Man Utd     | 26-Dec-2023 | Emirates        |\n' +
+                      '| 5 | Chelsea |         |             |             |                 |\n' +
+                      '| 6 |         | Chelsea | Aston Villa | 20-Dec-2023 | Stamford Bridge |\n' +
+                      '| 7 |         | Stoke   | Chelsea     | 24-Dec-2023 | Stoke Park      |\n' +
+                      '| 8 |         | Chelsea | West Ham    | 27-Dec-2023 | Stamford Bridge |';
 
-        int lowerX = inputData.Keys.FirstOrDefault(k => k < x);
-        int upperX = inputData.Keys.LastOrDefault(k => k > x);
-
-        if (lowerX == 0 || upperX == 0)
-        {
-            // No valid range found, cannot interpolate
-            continue;
-        }
-
-        double lowerY = inputData[lowerX];
-        double upperY = inputData[upperX];
-
-        double interpolatedY = lowerY + (upperY - lowerY) * (x - lowerX) / (upperX - lowerX);
-        interpolatedData[x] = interpolatedY;
-    }
-
-    return interpolatedData;
-}
+const htmlTable = md.render(markdownTable);
+console.log(htmlTable);
 ```
 
-Here's an example of how you can use this function:
+This will output the following HTML:
 
-```C#
-Dictionary<int, double> inputData = new Dictionary<int, double>();
-inputData[1] = 1.0;
-inputData[5] = 2.5;
-inputData[10] = 3.0;
-
-List<int> interpXPoints = new List<int> { 2, 3, 4, 6, 7, 8, 9 };
-
-Dictionary<int, double> interpolatedData = LinearInterpolation(inputData, interpXPoints);
-
-foreach (KeyValuePair<int, double> pair in interpolatedData)
-{
-    Console.WriteLine("X: " + pair.Key + ", Y: " + pair.Value);
-}
+```html
+<table>
+  <thead>
+    <tr>
+      <th>1</th>
+      <th>Team</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2</td>
+      <td>Man Utd</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td></td>
+      <td>Man Utd</td>
+      <td>Liverpool</td>
+      <td>23-Dec-2023</td>
+      <td>Anfield</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td></td>
+      <td>Arsenal</td>
+      <td>Man Utd</td>
+      <td>26-Dec-2023</td>
+      <td>Emirates</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Chelsea</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td></td>
+      <td>Chelsea</td>
+      <td>Aston Villa</td>
+      <td>20-Dec-2023</td>
+      <td>Stamford Bridge</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td></td>
+      <td>Stoke</td>
+      <td>Chelsea</td>
+      <td>24-Dec-2023</td>
+      <td>Stoke Park</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td></td>
+      <td>Chelsea</td>
+      <td>West Ham</td>
+      <td>27-Dec-2023</td>
+      <td>Stamford Bridge</td>
+    </tr>
+  </tbody>
+</table>
 ```
 
-Output:
-```
-X: 2, Y: 1.5
-X: 3, Y: 2
-X: 4, Y: 2.25
-X: 6, Y: 2.75
-X: 7, Y: 2.875
-X: 8, Y: 3
-X: 9, Y: 3
-```
-
-In this example, the input data contains three points: (1, 1.0), (5, 2.5), and (10, 3.0). The interpolation x points are specified as [2, 3, 4, 6, 7, 8, 9]. The linear interpolation calculates the corresponding y values for the given x points, filling in the gaps between the input data.
+You can then use this HTML table as desired.
 
 ## Chat GPT 4.0
 
-Sure, here is a simple implementation in C# using the Dictionary and List classes. 
+Here's your converted HTML table:
 
-```C#
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-public class LinearInterpolation
-{
-    public Dictionary<int, double> Interpolate(Dictionary<int, double> inputPoints, List<int> interpPoints)
-    {
-        if (inputPoints.Count < 2)
-            throw new ArgumentException("At least two input points are needed.");
-
-        var orderedInputPoints = inputPoints.OrderBy(p => p.Key).ToList();
-        var result = new Dictionary<int, double>();
-        
-        foreach (var point in interpPoints)
-        {
-            for (int i = 0; i < orderedInputPoints.Count - 1; i++)
-            {
-                if (orderedInputPoints[i].Key <= point && point <= orderedInputPoints[i + 1].Key)
-                {
-                    var x0 = orderedInputPoints[i].Key;
-                    var x1 = orderedInputPoints[i + 1].Key;
-                    var y0 = orderedInputPoints[i].Value;
-                    var y1 = orderedInputPoints[i + 1].Value;
-                    
-                    var interpolatedValue = y0 + (point - x0) * (y1 - y0) / (x1 - x0);
-                    result[point] = interpolatedValue;
-                    
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-}
+```html
+<table>
+  <tr>
+    <th>1</th>
+    <th>Team</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Man Utd</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td></td>
+    <td>Man Utd</td>
+    <td>Liverpool</td>
+    <td>23-Dec-2023</td>
+    <td>Anfield</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td></td>
+    <td>Arsenal</td>
+    <td>Man Utd</td>
+    <td>26-Dec-2023</td>
+    <td>Emirates</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>Chelsea</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td></td>
+    <td>Chelsea</td>
+    <td>Aston Villa</td>
+    <td>20-Dec-2023</td>
+    <td>Stamford Bridge</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td></td>
+    <td>Stoke</td>
+    <td>Chelsea</td>
+    <td>24-Dec-2023</td>
+    <td>Stoke Park</td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td></td>
+    <td>Chelsea</td>
+    <td>West Ham</td>
+    <td>27-Dec-2023</td>
+    <td>Stamford Bridge</td>
+  </tr>
+</table>
 ```
-
-And you could use it as follows:
-
-```C#
-var inputPoints = new Dictionary<int, double> { {1, 10}, {2, 20}, {3, 30}, {4, 40} };
-var interpPoints = new List<int> {1, 2, 3};
-
-var interpolation = new LinearInterpolation();
-var result = interpolation.Interpolate(inputPoints, interpPoints);
-
-foreach (var pair in result)
-{
-    Console.WriteLine($"X={pair.Key}, Y={pair.Value}");
-}
-```
-
-In the example above, the input dictionary `inputPoints` represents the original data points for the interpolation, with the keys representing the x-values and the values representing the y-values. The `interpPoints` list contains the x-values at which to calculate the interpolated y-values. The result is a new dictionary with the x-values from `interpPoints` and the interpolated y-values.
+Please note that the numbers 1,2,3... in the first column are used in this case as headers. If this is not what you expected and you need them as simple cells, just replace the `<th>` and `</th>` tags with `<td>` and `</td>`.
 
 ## Chat GPT 3.5
 
-Sure! Here are some example unit tests using xUnit for the interpolator function:
+Yes, you can add JavaScript to achieve the desired functionality. Here's an example of how you can accomplish that:
 
-```csharp
-using Xunit;
-
-public class InterpolatorTests
-{
-    private readonly Interpolator _interpolator;
-
-    public InterpolatorTests()
-    {
-        _interpolator = new Interpolator();
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    table {
+      border-collapse: collapse;
     }
 
-    [Fact]
-    public void Interpolate_WithValidInput_ReturnsExpectedResult()
-    {
-        // Arrange
-        double[] x = {1, 2, 3, 4, 5};
-        double[] y = {10, 20, 30, 40, 50};
-        double targetX = 3.5;
-
-        // Act
-        double result = _interpolator.Interpolate(x, y, targetX);
-
-        // Assert
-        Assert.Equal(35, result);
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
     }
+  </style>
+</head>
+<body>
+  <table>
+    <tr>
+      <th>Club</th>
+      <th>Country</th>
+    </tr>
+    <tr>
+      <td onclick="toggleVisibility('row2')">Man Utd</td>
+      <td>England</td>
+    </tr>
+    <tr id="row2">
+      <td>Player 1</td>
+      <td>Player 1 Country</td>
+    </tr>
+    <tr id="row3">
+      <td>Player 2</td>
+      <td>Player 2 Country</td>
+    </tr>
+    <tr id="row4">
+      <td>Player 3</td>
+      <td>Player 3 Country</td>
+    </tr>
+    <tr>
+      <td onclick="toggleVisibility('row5')">Chelsea</td>
+      <td>England</td>
+    </tr>
+    <tr id="row5">
+      <td>Player 4</td>
+      <td>Player 4 Country</td>
+    </tr>
+    <tr id="row6">
+      <td>Player 5</td>
+      <td>Player 5 Country</td>
+    </tr>
+    <tr id="row7">
+      <td>Player 6</td>
+      <td>Player 6 Country</td>
+    </tr>
+  </table>
 
-    [Fact]
-    public void Interpolate_WithEmptyInputArrays_ReturnsNaN()
-    {
-        // Arrange
-        double[] x = { };
-        double[] y = { };
-        double targetX = 1.5;
-
-        // Act
-        double result = _interpolator.Interpolate(x, y, targetX);
-
-        // Assert
-        Assert.True(double.IsNaN(result));
+  <script>
+    function toggleVisibility(rowId) {
+      var row = document.getElementById(rowId);
+      if (row.style.display === "none") {
+        row.style.display = "table-row";
+      } else {
+        row.style.display = "none";
+      }
     }
-
-    [Theory]
-    [InlineData(new double[] {1, 2, 3}, new double[] {10, 20}, 2.5)] // Unequal input arrays
-    [InlineData(new double[] {1, 2, 3}, new double[] {10, 20, 30}, 4)] // Out of range targetX
-    public void Interpolate_WithInvalidInput_ReturnsNaN(double[] x, double[] y, double targetX)
-    {
-        // Act
-        double result = _interpolator.Interpolate(x, y, targetX);
-
-        // Assert
-        Assert.True(double.IsNaN(result));
-    }
-}
+  </script>
+</body>
+</html>
 ```
 
-To test the performance of the interpolator function with a large number of inputs, you can use the `BenchmarkDotNet` library. Here's an example of how you can write a performance test using `BenchmarkDotNet`:
+In this example, we have added an `onclick` attribute to the cells containing "Man Utd" and "Chelsea". The `toggleVisibility` JavaScript function is then called when those cells are clicked.
 
-```csharp
-using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
+The `toggleVisibility` function takes the `rowId` parameter, which corresponds to the `id` attribute of the row to be toggled. It retrieves the row element using `document.getElementById`, and then checks the current display style of the row. If the display is `"none"`, it sets it to `"table-row"` to make the row visible. If the display is not `"none"`, it sets it to `"none"` to hide the row.
 
-public class InterpolatorPerformanceTest
-{
-    private readonly Interpolator _interpolator;
-    private readonly double[] _x;
-    private readonly double[] _y;
-    private readonly double _targetX;
-
-    public InterpolatorPerformanceTest()
-    {
-        _interpolator = new Interpolator();
-
-        // Create large input arrays
-        int arraySize = 1000000; // 1 million
-        _x = new double[arraySize];
-        _y = new double[arraySize];
-        for (int i = 0; i < arraySize; i++)
-        {
-            _x[i] = i;
-            _y[i] = i * 10;
-        }
-
-        _targetX = arraySize / 2; // Target the middle value
-    }
-
-    [Benchmark]
-    public void Interpolate_PerformanceTest()
-    {
-        _interpolator.Interpolate(_x, _y, _targetX);
-    }
-}
-
-// To run the performance test, use the following code:
-// BenchmarkRunner.Run<InterpolatorPerformanceTest>();
-```
-
-Make sure to install the `BenchmarkDotNet` NuGet package and include the necessary `using` statements. Running the performance test will provide you with information about the execution time and other performance metrics of the `Interpolator.Interpolate` method.
+By applying this logic, rows 2, 3, and 4 will toggle visibility when the "Man Utd" cell is clicked, and rows 5, 6, and 7 will toggle visibility when the "Chelsea" cell is clicked.
 
 ## Chat GPT 4.0
 
-Sure, here are some unit tests using xUnit for the interpolator and performance test for large inputs:
+Yes, you can use JavaScript's DOM manipulation methods to achieve the desired functionality. We can use the onClick event handler to bind the click event with the table rows.
 
-```csharp
-public class InterpolatorTests
-{
-    private readonly LinearInterpolator _interpolator;
+Below, you will find a minimal sketch of an HTML document which contains the required JavaScript logic. Please, adjust it to fit your needs. 
 
-    public InterpolatorTests()
-    {
-        this._interpolator = new LinearInterpolator();
-    }
-
-    [Fact]
-    public void Interpolation_WithTwoPoints_ShouldGiveCorrectValue()
-    {
-        double result = _interpolator.Interpolate(0, 10, 0.5);
-
-        Assert.Equal(5, result);
-    }
-
-    [Fact]
-    public void Interpolation_WithSamePoints_ShouldGiveSameResult()
-    {
-        double result = _interpolator.Interpolate(100, 100, 0.7);
-
-        Assert.Equal(100, result);
-    }
-
-    [Fact]
-    public void Interpolation_OutsideOfTheInterval_ShouldExtrapolate()
-    {
-        double result = _interpolator.Interpolate(0, 10, 1.5);
-
-        Assert.Equal(15, result);
-    }
-
-    [Theory]
-    [InlineData(0, 10, -1)]
-    [InlineData(0, 10, 2)]
-    [InlineData(0, 1, -0.01)]
-    public void Interpolation_OutsideOfTheUnitInterval_ShouldThrowArgumentOutOfRangeException(double x0, double x1, double t)
-    {
-        Assert.Throws<ArgumentOutOfRangeException>(() => _interpolator.Interpolate(x0, x1, t));
-    }
-
-    [Fact]
-    public void Interpolation_WithLargeInputs_ShouldNotOverflow()
-    {
-        double result = _interpolator.Interpolate(double.MaxValue / 2, double.MaxValue / 2, 0.6);
-
-        Assert.Equal(double.MaxValue / 2, result);
-    }
-
-    [Fact]
-    public void Interpolation_WithLargeNumberOfInputs_ShouldPerformWithinAcceptableTime()
-    {
-        var watch = new Stopwatch();
-        watch.Start();
-
-        for (var i = 0; i < 10000000; i++)
-        {
-            _interpolator.Interpolate(i, i + 1, 0.5);
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <stlye>
+        .hide {
+            display: none;
         }
+    </style>
+</head>
+<body>
+    <table id="myTable">
+        <tbody>
+            <tr><td data-trigger="group1">Man Utd</td></tr>
+            <tr class="group1 hide"><td>Row 3</td></tr>
+            <tr class="group1 hide"><td>Row 4</td></tr>
+            <tr><td data-trigger="group2">Chelsea</td></tr>
+            <tr class="group2 hide"><td>Row 6</td></tr>
+            <tr class="group2 hide"><td>Row 7</td></tr>
+            <tr class="group2 hide"><td>Row 8</td></tr>
+        </tbody>
+    </table>
 
-        watch.Stop();
-
-        // The actual acceptable duration would depend on the requirements and the specific system used for testing
-        Assert.InRange(watch.ElapsedMilliseconds, 0, 2000);
-    }
-}
+    <script>
+        document.querySelectorAll('#myTable td[data-trigger]').forEach(cell => {
+            cell.addEventListener('click', event => {
+                document.querySelectorAll('.' + event.target.dataset.trigger).forEach(row => {
+                    row.classList.toggle('hide');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
 ```
-Please replace the placeholder value in the last test `InRange` assertion with the maximum acceptable time for the given operation on your specific system or requirements. The one I've used (2000 milliseconds for 10,000,000 interpolations) is just an example.
+This script will hide or show rows that have the same class as the `data-trigger` attribute from the clicked cell. (for instance if you click 'Man Utd' it will look for rows with class "group1"). You can see there is a very basic CSS which has the `hide` class which set the `display` property to `none`.
+
+It also assumes you have more control over the table markup. If this is not case (for example the table is generated on the server side) you might need a more complex script to find those rows.
